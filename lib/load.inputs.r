@@ -104,18 +104,30 @@
     #factor groups so they appear in user-listed order
     map[,map_column] <- factor(map[,map_column],groups)  
     }
+    print("7 load.inputs.r dim(otu_table)")
+    print(dim(otu_table))
 
     #Drop any samples with no OTUs
     otu_table <- otu_table[,colSums(otu_table) > 1]
+    print("6 load.inputs.r dim(otu_table)")
+    print(dim(otu_table))
 
     #Change those less than 1/1 millionth of read depth to 0
     otu_table[otu_table < sum(colSums(otu_table))/1000000] <- 0
+    print("5 load.inputs.r dim(otu_table)")
+    print(dim(otu_table))
 
     #Change singletons to 0 (needed for low depth OTU tables)
-    otu_table[otu_table < 2] <- 0
+    #otu_table[otu_table < 2] <- 0
+    print("4 load.inputs.r dim(otu_table)")
+    print(dim(otu_table))
 
     ##Filter the OTU table to keep OTUs in at least 2 sample
-    otu_table <- otu_table[rowSums(otu_table > 0) > 2,]
+    print("3 load.inputs.r dim(otu_table)")
+    print(dim(otu_table))
+    #otu_table <- otu_table[rowSums(otu_table > 0) > 2,]
+    print("2 load.inputs.r dim(otu_table)")
+    print(dim(otu_table))
     #otu_table <- otu_table[rowSums(otu_table > 0) > (0.05*ncol(otu_table)),]
 
     #get indices of which rows to keep
@@ -127,6 +139,8 @@
     intersect_btwn <- intersect(rownames(map),colnames(otu_table))
     new_map <- map[intersect_btwn,,drop=F]
     new_otu <- droplevels(as.data.frame(otu_table[,intersect_btwn]))
+    print("1 load.inputs.r dim(new_otu)")
+    print(dim(new_otu))
 
     #print the groups to be tested
     # cat("\nThe number of samples in each group are:")
@@ -136,6 +150,8 @@
   }
   rownames(new_otu) <- gsub("\ ", "_", rownames(new_otu))
 
+  print("final load.inputs.r dim(new_otu)")
+  print(dim(new_otu))
   return(list(
     otu_table=new_otu,
     map=new_map,
